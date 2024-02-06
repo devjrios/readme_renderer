@@ -27,7 +27,7 @@ ALLOWED_TAGS = {
     "dl", "dt", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "img", "p", "pre",
     "span", "sub", "summary", "sup", "table", "tbody", "td", "th", "thead",
     "tr", "tt", "kbd", "var", "input", "section", "aside", "nav", "s", "figure",
-    "figcaption", "picture",
+    "figcaption", "picture", "path", "svg"
 }
 
 ALLOWED_ATTRIBUTES = {
@@ -40,7 +40,7 @@ ALLOWED_ATTRIBUTES = {
     "*": {"id"},
     "hr": {"class"},
     "img": {"src", "width", "height", "alt", "align", "class"},
-    "span": {"class"},
+    "span": {"class", "style", "aria-hidden"},
     "th": {"align", "class"},
     "td": {"align", "colspan", "rowspan"},
     "div": {"align", "class"},
@@ -62,6 +62,8 @@ ALLOWED_ATTRIBUTES = {
     "ul": {"class"},
     "nav": {"class"},
     "figure": {"class"},
+    "svg": {"xmlns", "width", "height", "viewBox", "preserveAspectRatio"},
+    "path": {"d"}
 }
 
 
