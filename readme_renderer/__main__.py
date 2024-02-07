@@ -57,33 +57,43 @@ def main(cli_args: Optional[List[str]] = None) -> None:
     if rendered is None:
         sys.exit(1)
 
-    rendered = f"""
-    <!DOCTYPE html>
+    pygment_styles = '\n'.join(
+        filter(lambda e: r'pre {' not in e.strip(),
+               f.HtmlFormatter().get_style_defs().split('\n'))
+    )
+    rendered = f"""<!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-light.css" integrity="sha512-twSIkcOWTg8pO2szOkSwXeumnI79JQ0zVRavBB5cdJvhVFhReF9fBlyFM380P6vKIQ4mlD80EPtuZdSPpqYDgQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.css" integrity="sha512-8Sjzsdvg/n5bk1R2UoBRNzowylImkCddXj0QXeHSDIW0Ad8mebfIkGxUSfrPzEt7km4MqRMMT3RSF4gGxTVqGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    </head>
-    <style>
-        .markdown-body {{
-            box-sizing: border-box;
-            min-width: 200px;
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 45px;
-        }}
-        .markdown-body table {{
-            max-width: fit-content;
-        }}
-        @media (max-width: 767px) {{
+        <style>
             .markdown-body {{
-                padding: 15px;
+                box-sizing: border-box;
+                min-width: 200px;
+                max-width: 980px;
+                margin: 0 auto;
+                padding: 45px;
             }}
-        }}
-        {f.HtmlFormatter().get_style_defs()}
-    </style>
+            .markdown-body table {{
+                max-width: fit-content;
+            }}
+            .markdown-body pre {{
+                line-height: 1.5em;
+                margin-top: 1.5em;
+                margin-bottom: 1.5em;
+                page-break-before: auto;
+                page-break-after: auto;
+                {pygment_styles}
+            }}
+            @media (max-width: 767px) {{
+                .markdown-body {{
+                    padding: 15px;
+                }}
+            }}
+        </style>
+    </head>
     <body>
         <article class="markdown-body">
             {rendered}
