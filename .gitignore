@@ -11,6 +11,9 @@ htmlcov/
 *.egg
 *.eggs
 *.py[co]
+*node_modules/
+package.json
+package-lock.json
 .pytest_cache/
 .python-version
 

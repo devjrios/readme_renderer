@@ -7,7 +7,7 @@ authors = [
 ]
 readme = "README.rst"
 license = {text = "Apache License, Version 2.0"}
-dependencies = ["nh3>=0.2.14", "docutils>=0.13.1", "Pygments>=2.5.1"]
+dependencies = ["nh3>=0.2.14", "docutils>=0.13.1", "Pygments>=2.5.1", "stpyv8>=12.1.285.28"]
 classifiers = [
   "Intended Audience :: Developers",
   "License :: OSI Approved :: Apache Software License",

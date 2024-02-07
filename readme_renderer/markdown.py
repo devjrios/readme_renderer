@@ -15,6 +15,7 @@
 import re
 import warnings
 from typing import cast, Any, Dict, Callable, Match, Optional
+from readme_renderer.math_parser import MathParser, MathSymbolParser
 
 from html import unescape
 
@@ -65,12 +66,18 @@ def render(
     if not renderer:
         return None
 
-    rendered = renderer(raw)
+    raw_with_fenced_math: str = MathSymbolParser(raw_document=raw).render
+    rendered = renderer(raw_with_fenced_math)
 
     if not rendered:
         return None
 
-    highlighted = _highlight(rendered)
+    math_rendered: str = MathParser(html=rendered).render
+
+    if not math_rendered:
+        return None
+
+    highlighted = _highlight(math_rendered)
     cleaned = clean(highlighted)
     return cleaned
 
