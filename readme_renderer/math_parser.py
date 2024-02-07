@@ -69,7 +69,7 @@ class MathParser:
                     if not inline:
                         return (r'<pre lang="math">'f"""{math}"""r'</pre>')
                     return math
-                return code_expr.sub(replacer, self.html.strip()).strip()
+                return code_expr.sub(replacer, self.html)
 
         except STPyV8.JSError as err:
             js_err, js_function = str(err.frames[0][0]), str(err.frames[-1][0])
