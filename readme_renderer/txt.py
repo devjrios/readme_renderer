@@ -14,6 +14,8 @@
 
 from typing import Any, Optional
 
+from readme_renderer.math_parser import MathParser, MathSymbolParser
+
 from .clean import clean
 
 from html import escape as html_escape
@@ -21,4 +23,13 @@ from html import escape as html_escape
 
 def render(raw: str, **kwargs: Any) -> Optional[str]:
     rendered = html_escape(raw).replace("\n", "<br>")
-    return clean(rendered, tags={"br"})
+    fenced_doc = MathSymbolParser(raw_document=rendered).render
+    math_rendered = MathParser(html=fenced_doc).render
+    return clean(math_rendered,
+                 tags={"br", "path", "svg", "span"},
+                 attributes={
+                    "span": {"class", "style", "aria-hidden"},
+                    "path": {"d"},
+                    "svg": {"xmlns", "width", "height", "viewBox",
+                            "preserveAspectRatio"},
+                 })
