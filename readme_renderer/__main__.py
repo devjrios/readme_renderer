@@ -64,7 +64,7 @@ def main(cli_args: Optional[List[str]] = None) -> None:
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-light.css" integrity="sha512-twSIkcOWTg8pO2szOkSwXeumnI79JQ0zVRavBB5cdJvhVFhReF9fBlyFM380P6vKIQ4mlD80EPtuZdSPpqYDgQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.css" integrity="sha384-OH8qNTHoMMVNVcKdKewlipV4SErXqccxxlg6HC9Cwjr5oZu2AdBej1TndeCirael" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.css" integrity="sha512-8Sjzsdvg/n5bk1R2UoBRNzowylImkCddXj0QXeHSDIW0Ad8mebfIkGxUSfrPzEt7km4MqRMMT3RSF4gGxTVqGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <style>
         .markdown-body {{
