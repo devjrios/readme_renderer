@@ -5,6 +5,7 @@ from readme_renderer.txt import render as render_txt
 import pathlib
 from importlib.metadata import metadata
 import sys
+import pygments.formatters as f
 from typing import Optional, List
 
 
@@ -55,6 +56,41 @@ def main(cli_args: Optional[List[str]] = None) -> None:
                          "`rst`, or `txt`)")
     if rendered is None:
         sys.exit(1)
+
+    rendered = f"""
+    <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@primer/css@21.1.1/dist/primer.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.css" integrity="sha384-OH8qNTHoMMVNVcKdKewlipV4SErXqccxxlg6HC9Cwjr5oZu2AdBej1TndeCirael" crossorigin="anonymous">
+    </head>
+    <style>
+        .markdown-body {{
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+        }}
+        .markdown-body table {{
+            max-width: fit-content;
+        }}
+        @media (max-width: 767px) {{
+            .markdown-body {{
+                padding: '15px';
+            }}
+        }}
+        {f.HtmlFormatter().get_style_defs()}
+    </style>
+    <body>
+        <article class="markdown-body">
+            {rendered}
+        </article>
+    </body>
+    </html>"""
+
     print(rendered, file=args.output)
 
 
