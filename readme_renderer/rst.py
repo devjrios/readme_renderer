@@ -20,6 +20,8 @@ from docutils.nodes import colspec, image
 from docutils.writers.html5_polyglot import HTMLTranslator, Writer
 from docutils.utils import SystemMessage
 
+from readme_renderer.math_parser import MathParser, MathSymbolParser
+
 from .clean import clean
 
 
@@ -127,6 +129,10 @@ def render(
         rendered = parts.get("docinfo", "") + parts.get("fragment", "")
 
     if rendered:
+        # On prior stages docutils made tags like :math: or .. math::
+        # transform into a well known delimiter (magic).
+        rendered = MathSymbolParser(raw_document=rendered).render
+        rendered = MathParser(html=rendered).render
         return clean(rendered)
     else:
         # If the warnings stream is empty, docutils had none, so add ours.

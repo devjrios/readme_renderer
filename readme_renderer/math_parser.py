@@ -116,7 +116,7 @@ class MathSymbolParser:
     
     @property
     def render(self) -> Optional[str]:
-        doc: str = self.raw_document.strip()
+        doc: str = self.raw_document
 
         def replacer(inline: bool, tex_expr: re.Match[Any]):
             content: str = tex_expr.group("content")
@@ -135,4 +135,4 @@ class MathSymbolParser:
             _replacer = partial(replacer, delimiter['inline'])
             doc = math_expr.sub(_replacer, doc)
         
-        return doc.strip()
+        return doc
