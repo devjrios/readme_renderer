@@ -82,8 +82,8 @@ def clean(
             html,
             tags=ALLOWED_TAGS,
             attributes=ALLOWED_ATTRIBUTES,
-            link_rel="nofollow",
-            url_schemes={"http", "https", "mailto"},
+            link_rel="noopener noreferrer nofollow",
+            url_schemes={"http", "https", "mailto", "ftp", "file"},
         )
 
         return cleaned
