@@ -79,13 +79,16 @@ def main(cli_args: Optional[List[str]] = None) -> None:
             .markdown-body table {{
                 max-width: fit-content;
             }}
+            .markdown-body h1:is(:nth-of-type(n+4)) {{
+                page-break-before: always;
+            }}
             .markdown-body pre {{
-                line-height: 1.5em;
-                margin-top: 1.5em;
-                margin-bottom: 1.5em;
-                page-break-before: auto;
-                page-break-after: auto;
+                line-height: 1em;
+                break-inside: avoid;
                 {pygment_styles}
+            }}
+            .markdown-body li {{
+                break-inside: avoid;
             }}
             @media (max-width: 767px) {{
                 .markdown-body {{
