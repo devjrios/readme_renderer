@@ -79,11 +79,8 @@ class MathSymbolParser:
         The input should be the raw document before passing
         through the HTML converter.
 
-        (GFM breaks syntax by adding <em></em> for some content,
-        so we pre-fence things so it can play nice)
-
-        (This class can probably be used for RST and TXT because the
-        same rules apply in all 3 cases.)
+        (GFM breaks latex syntax for some content,
+        so we pre-fence things with <pre> and <code> tags so it can play nice)
     """
     delimiters: List[Any] = field(init=False, default=None)
     raw_document: str = field(default=...)
