@@ -33,7 +33,6 @@ class MathParser:
         metadata={"version": __version__},
     )
     script_content: str = field(init=False, default=None)
-    error_detail: Optional[str] = field(init=False, default=None)
 
     def __post_init__(self):
         if not self.script_src or not Path(self.script_src).resolve().is_file():
@@ -43,41 +42,33 @@ class MathParser:
 
     @property
     def render(self) -> Optional[str]:
-        try:
-            with STPyV8.JSContext() as context:
-                context.eval(self.script_content)
-                renderToString: STPyV8.JSFunction = context.eval("katex.renderToString")
+        with STPyV8.JSContext() as context:
+            context.eval(self.script_content)
+            renderToString: STPyV8.JSFunction = context.eval("katex.renderToString")
 
-                code_expr = re.compile(
-                    r'<pre lang="math"(?P<inline> inline|)>(.*?)<code>(?P<math>.+?)'
-                    r'</code>(.*?)</pre>'
-                    ,re.DOTALL)
-                def replacer(html_fence: re.Match[Any]):
-                    math = html_fence.group("math")
-                    math = None if not math else math.strip()
+            code_expr = re.compile(
+                r'<pre lang="math"(?P<inline> inline|)>(.*?)<code>(?P<math>.+?)'
+                r'</code>(.*?)</pre>'
+                ,re.DOTALL)
+            def replacer(html_fence: re.Match[Any]):
+                math = html_fence.group("math")
+                math = None if not math else math.strip()
 
-                    inline = html_fence.group("inline")
-                    inline = None if not inline else inline.strip()
+                inline = html_fence.group("inline")
+                inline = None if not inline else inline.strip()
 
-                    if not math:
-                        return
-                    math = unescape(math)
-                    math = renderToString(math, {"throwOnError": True,
-                                                 "fleqn": False,
-                                                 "displayMode": not bool(inline),
-                                                 "output": "html"})
-                    if not inline:
-                        return (r'<pre lang="math">'f"""{math}"""r'</pre>')
-                    return math
-                return code_expr.sub(replacer, self.html)
+                if not math:
+                    return
+                math = unescape(math)
+                math = renderToString(math, {"throwOnError": False,
+                                             "fleqn": False,
+                                             "displayMode": not bool(inline),
+                                             "output": "html"})
+                if not inline:
+                    return (r'<pre lang="math">'f"""{math}"""r'</pre>')
+                return math
+            return code_expr.sub(replacer, self.html)
 
-        except STPyV8.JSError as err:
-            js_err, js_function = str(err.frames[0][0]), str(err.frames[-1][0])
-
-            brief_err: str = f"{js_err}: {js_function}"
-            detailed_err: str = "".join(str(err).split("->")[:-1])
-
-            self.error_detail = f"{brief_err}\n{detailed_err}"
 
 @dataclass(kw_only=True)
 class MathSymbolParser:
