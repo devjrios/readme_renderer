@@ -104,7 +104,6 @@ class MathSymbolParser:
 
         self.delimiters = [
             {"start": "$$", "end": "$$", "inline": False},
-            {"start": "$", "end": "$", "inline": True},
             {"start": "\\begin{equation}", "end": "\\end{equation}", "inline": False},
             {"start": "\\begin{align}", "end": "\\end{align}", "inline": False},
             {"start": "\\begin{alignat}", "end": "\\end{alignat}", "inline": False},
@@ -112,6 +111,8 @@ class MathSymbolParser:
             {"start": "\\begin{CD}", "end": "\\end{CD}", "inline": False},
             {"start": "\\[", "end": "\\]", "inline": False},
             {"start": "\\(", "end": "\\)", "inline": True},
+            {"start": "$`", "end": "`$", "inline": True},
+            {"start": "$", "end": "$", "inline": True},
         ]
     
     @property
@@ -126,13 +127,34 @@ class MathSymbolParser:
             return (f'<pre lang="math"{" inline" if inline else ""}>'
                     f"""<code>{content}</code>"""r'</pre>')
 
-        for delimiter in self.delimiters:
+        for delimiter in filter(lambda e: not e['inline'], self.delimiters):
+            pattern = (
+                "(?<!```)"
+                + re.escape(delimiter["start"]) + r'(?P<content>.*?)'
+                + re.escape(delimiter["end"])
+                + "(?!```)"
+            )
+            math_expr = re.compile(pattern, re.DOTALL)
+            _replacer = partial(replacer, delimiter['inline'])
+            doc = math_expr.sub(_replacer, doc)
+
+        for delimiter in filter(lambda e: e['inline'], self.delimiters):
             pattern = (
                 re.escape(delimiter["start"]) + r'(?P<content>.*?)'
                 + re.escape(delimiter["end"])
             )
             math_expr = re.compile(pattern, re.DOTALL)
             _replacer = partial(replacer, delimiter['inline'])
-            doc = math_expr.sub(_replacer, doc)
+
+            for expr in self.find_non_fenced_lines(doc):
+                sub = math_expr.sub(_replacer, expr)
+                if sub and sub.strip():
+                    doc = doc.replace(expr, sub)
         
         return doc
+
+    def find_non_fenced_lines(self, text: str):
+        code_pattern = re.compile(r'(<pre>|<code>|```.+?).*?(</pre>|</code>|```)', re.DOTALL)
+        input_without_occurrences = code_pattern.sub('', text)
+        lines = input_without_occurrences.split('\n')
+        return [line for line in lines if line.strip()]
