@@ -16,5 +16,5 @@ Test this README (or any personal file):
 
 .. code:: bash
 
-   python3 -m readme_renderer -m -f rst -o README.html README.rst && \
+   python3 -m readme_renderer -f rst -o README.html README.rst && \
    xdg-open README.html
