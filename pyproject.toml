@@ -1,69 +1,33 @@
-[project]
-name = "readme_renderer"
-version = "42.0"
-description = "readme_renderer is a library for rendering readme descriptions for Warehouse"
-authors = [
-  {name = "The Python Packaging Authority", email = "admin@mail.pypi.org"}
-]
-readme = "README.rst"
-license = {text = "Apache License, Version 2.0"}
-dependencies = ["nh3>=0.2.14", "docutils>=0.13.1", "Pygments>=2.5.1", "stpyv8>=12.1.285.28"]
-classifiers = [
-  "Intended Audience :: Developers",
-  "License :: OSI Approved :: Apache Software License",
-  "Natural Language :: English",
-  "Operating System :: MacOS :: MacOS X",
-  "Operating System :: POSIX",
-  "Operating System :: POSIX :: BSD",
-  "Operating System :: POSIX :: Linux",
-  "Operating System :: Microsoft :: Windows",
-  "Programming Language :: Python",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy",
-  "Typing :: Typed"
-]
-requires-python = ">=3.8"
-
-[project.optional-dependencies]
-md = ["cmarkgfm>=0.8.0"]
-
-[tool.setuptools]
-include-package-data = true
-
 [tool.setuptools.packages.find]
+where = ["readme_renderer"]
 exclude = ["tests", "tests.*"]
 
-[project.urls]
-Home-page = "https://github.com/pypa/readme_renderer"
+[tool.pyright]
+include = ["readme_renderer"]
+reportMissingImports = true
+reportMissingTypeStubs = false
+defineConstant = { DEBUG = true }
+pythonVersion = "3.11"
+pythonPlatform = "Linux"
+executionEnvironments = [{root="py"}]
+
+[tool.poetry]
+name = "readme_renderer"
+packages = [{include="*",from="readme_renderer"}]
+version = "1.0.0"
+description = "This is readme_renderer"
+authors = ["Juan Rios <jrios@tuta.io>"]
+license = "MIT"
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+python = "~3.11"
+nh3 = ">=0.2.14"
+docutils = ">=0.13.1"
+Pygments = ">=2.5.1"
+stpyv8 = "~12.1.285.28"
+cmarkgfm = ">=0.8.0"
 
 [build-system]
-requires = ["setuptools>=40.8.0"]
-build-backend = "setuptools.build_meta"
-
-# TODO: Remove when https://github.com/mgedmin/check-manifest/pull/155 released
-[tool.check-manifest]
-ignore = [".gitpod.yml"]
-
-[tool.coverage.run]
-branch = true
-
-[tool.mypy]
-strict = true
-warn_unused_configs = true
-show_error_codes = true
-enable_error_code = [
-    "ignore-without-code"
-]
-
-[[tool.mypy.overrides]]
-# These modules do not yet have types available.
-module = [
-    "cmarkgfm.*"
-]
-ignore_missing_imports = true
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
